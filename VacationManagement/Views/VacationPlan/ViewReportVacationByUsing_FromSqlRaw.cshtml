@@ -1,0 +1,171 @@
+﻿@model IEnumerable<GetReportsVacationData>
+
+@{
+    ViewData["Title"] = "Vacation Reports";
+    var employees = ViewBag.Employee;
+    SelectList EmployeeslistItems = new SelectList(employees, "Id", "Name");
+}
+
+<h3 class="text-danger">Vacation Reports</h3>
+<form asp-action="GetReportVacationByUsing_FromSqlRaw" asp-controller="VacationPlan">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="control-label">From</label>
+            @*<input class="form-control" type="date" name="fromStartDate" value="@(DateTime.Now.ToString("yyyy"))-01-01" />*@
+            @*<input class="form-control" type="date" name="fromStartDate" value="2024-01-01" />*@
+            <input class="form-control" type="date" name="fromStartDate" value="@(new DateTime(2020,01,01).ToString("yyyy-MM-dd"))" id="from"  />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">To</label>
+            <input class="form-control" type="date" name="toEndDate" value="@(DateTime.Now.ToString("yyyy"))-12-31" id="to" />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Employee</label>
+            <select name="empId" asp-items="EmployeeslistItems" class="form-control" id="empId">
+                <option value="0">
+                    select Employee
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <br />
+            <button type="submit" class="btn btn-outline-info border-dashed-2"> Search</button>
+             @*<a href="/VacationPlan/PrintReport" class="btn btn-outline-success border-dashed-2"> Print</a>*@
+            <button type="button" onclick="hiddenFormCSVFile('pdf')" class="btn btn-outline-success border-dashed-2"> Print PDF</button>
+               
+            <button type="button" onclick="hiddenFormCSVFile('csv')" class="btn btn-outline-primary border-dashed-2"> CVS File</button>
+        </div>
+    </div>
+
+
+    @*    <div class="form-group col-md-6">
+    <label class="control-label">Employee</label>
+    <input class="form-control"  name="empId" />
+    </div>*@
+
+
+</form>
+
+<br />
+<br />
+
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                 
+                    <th>Id</th>
+                    <th>Name</th>
+                <th>VacationBalance</th>
+                <th>TotalVacation</th>
+                <th>FinalTotalBalance </th>
+                 
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+
+                    <td>@item.Id</td>             
+                    <td>@item.Name</td>              
+                    <td>@item.VacationBalance</td>              
+                    <td>@item.TotalVacation</td>            
+                    <td>@item.FinalTotalBalance</td>              
+         
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h6 class="alert alert-danger">No Data..!</h6>
+}
+
+
+<script>
+    function hiddenFormCSVFile(type) {
+        alert("downloading.... please wait!");
+        const form = document.createElement("form");
+
+        // Set form attributes
+        form.method = "POST";
+        form.action = "/VacationPlan/CVSFile";  // Change this to your endpoint URL
+        form.style.display = "none";  // Hide the form from the user
+
+        // Create a hidden input element
+        let from = document.getElementById("from").value;
+        let to = document.getElementById("to").value;
+        let empId = document.getElementById("empId").value;
+
+
+        const input1 = document.createElement("input");
+        input1.type = "hidden";
+        input1.name = "fromStartDate";
+        input1.value = from;  // Example value
+
+        const input2 = document.createElement("input");
+        input2.type = "hidden";
+        input2.name = "toEndDate";
+        input2.value = to;  // Example value
+
+        const input3 = document.createElement("input");
+        input3.type = "hidden";
+        input3.name = "empId";
+        input3.value = empId;
+
+        const input4 = document.createElement("input");
+        input4.type = "hidden";
+        input4.name = "type";
+        input4.value = type;
+
+        // Append inputs to form
+        form.appendChild(input1);
+        form.appendChild(input2);
+        form.appendChild(input3);
+        form.appendChild(input4);
+
+        // Append the form to the body
+        document.body.appendChild(form);
+
+        // Submit the form
+        form.submit();
+    }
+</script>
+
+
+@*@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach (DataColumn column in Model.Columns)
+                {
+                    <th>@column.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (DataRow row in Model.Rows)
+            {
+                <tr>
+
+                    <td>@row[0]</td>             <!-- Access data by column index or Column Name-->
+                    <td>@row[1]</td>
+                    <td>@row[2]</td>
+                    <td>@row[3]</td>
+                    <td>@row[4]</td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h6 class="alert alert-danger">No Data..!</h6>
+}*@
+

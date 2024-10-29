@@ -1,0 +1,89 @@
+﻿@model IEnumerable<VacationManagement.Models.RequestVacation>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3>Request Vacation</h3>
+
+<p>
+    <a asp-action="Create" class="btn btn-info">Create Request</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EmpId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RequestDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StartDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VacationTypeId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Approve)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ApproveDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Comment)
+            </th>
+         
+     
+          
+            <th>Events </th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Employee.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RequestDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartDate)
+            </td>
+            <td style="color:#fff; background-color:@item?.VacationType?.BackgroundVacationColor">
+                @Html.DisplayFor(modelItem => item.VacationType.VacationName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndDate)
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Approve)*@
+                <input type="checkbox" checked="@item.Approve" disabled />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ApproveDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Comment)
+            </td>
+        
+           
+            <td>
+                    @Html.ActionLink("Edit", "Edit", new {  id = item.Id },htmlAttributes: new{@class="btn btn-info"}) |
+
+                    @Html.ActionLink("Delete", "DeleteVacationRequest", new {  id = item.Id },htmlAttributes: new{@class="btn btn-danger"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

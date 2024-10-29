@@ -1,0 +1,55 @@
+﻿@model IEnumerable<VacationManagement.Models.VacationType>
+
+@{
+    ViewData["Title"] = "VacationTypes";
+}
+
+<h4>VacationTypes</h4>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VacationName)
+            </th>
+            <th >
+                @Html.DisplayNameFor(model => model.BackgroundVacationColor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfdays)
+            </th>
+          
+            <th>Events</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+            <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VacationName)
+            </td>
+                <td style="color:#ffff;background-color:@item.BackgroundVacationColor">
+                @Html.DisplayFor(modelItem => item.BackgroundVacationColor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfdays)
+            </td>
+          
+            <td>
+                @Html.ActionLink("Edit", "Edit", new {  id=item.Id  } , htmlAttributes: new{@class="btn btn-info"}) |
+               
+                @Html.ActionLink("Delete", "Delete", new {  id=item.Id }, htmlAttributes: new{@class="btn btn-danger"})
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

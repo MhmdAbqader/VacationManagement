@@ -1,0 +1,48 @@
+﻿@model VacationManagement.Models.VacationType
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+ 
+
+<h5 class="alert alert-danger" >Are you sure you want to delete this?</h5>
+<div>
+    <h4>VacationType</h4>
+    <hr />
+    <dl class="row">
+
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.VacationName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.VacationName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BackgroundVacationColor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BackgroundVacationColor)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NoOfdays)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NoOfdays)
+        </dd>
+
+    </dl>
+
+    <br/>
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="VacationTypes">Back to List</a>
+    </form>
+</div>

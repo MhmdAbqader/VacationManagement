@@ -1,0 +1,81 @@
+﻿@using System.Data;
+@model System.Data.DataTable;
+
+@{
+    ViewData["Title"] = "Vacation Reports";
+    var employees = ViewBag.Employee;
+    SelectList EmployeeslistItems = new SelectList(employees, "Id", "Name");
+}
+
+<h3 class="text-danger">Vacation Reports</h3>
+<form asp-action="GetReportVacation" asp-controller="VacationPlan">
+    <div class="row">
+        <div class="form-group col-md-3">
+            <label class="control-label">From</label>
+            @*<input class="form-control" type="date" name="fromStartDate" value="@(DateTime.Now.ToString("yyyy"))-01-01" />*@
+            @*<input class="form-control" type="date" name="fromStartDate" value="2024-01-01" />*@
+            <input class="form-control" type="date" name="fromStartDate" value="@(new DateTime(2020,01,01).ToString("yyyy-MM-dd"))" />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">To</label>
+            <input class="form-control" type="date" name="toEndDate" value="@(DateTime.Now.ToString("yyyy"))-12-31" />
+        </div>
+        <div class="form-group col-md-3">
+            <label class="control-label">Employee</label>
+            <select name="empId" asp-items="EmployeeslistItems" class="form-control">
+                <option value="0">
+                    select Employee
+                </option>
+            </select>
+        </div>
+        <div class="form-group col-md-3">
+            <br />
+            <button type="submit" class="btn btn-outline-info border-dashed-2"> Search</button>
+            <button type="submit" class="btn btn-outline-success border-dashed-2"> Print</button>
+            <button type="submit" class="btn btn-outline-primary border-dashed-2"> PDF</button>
+        </div>
+    </div>
+
+   
+@*    <div class="form-group col-md-6">
+        <label class="control-label">Employee</label>
+        <input class="form-control"  name="empId" />
+    </div>*@
+ 
+   
+</form>
+
+<br />
+<br />
+
+@if (Model != null)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                @foreach(DataColumn column in Model.Columns)
+                {
+                    <th>@column.ColumnName</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(DataRow row in Model.Rows)
+            {
+                <tr> 
+
+                    <td>@row[0]</td>             <!-- Access data by column index or Column Name-->
+                    <td>@row[1]</td>
+                    <td>@row[2]</td>
+                    <td>@row[3]</td>
+                    <td>@row[4]</td>                    
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+<h6 class="alert alert-danger">No Data..!</h6>    
+}

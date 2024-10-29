@@ -1,0 +1,174 @@
+﻿@model VacationManagement.Models.VacationPlan
+@{
+    ViewData["Title"] = "Create";
+    //var vacationTypes = ViewBag.VacationType;
+    //SelectList VacationTypeslistItems = new SelectList(vacationTypes, "Id", "VacationName");
+}
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+ 
+
+<h4> New Vacation Plan</h4>
+<hr />
+<div class="row">
+    <div class="col-md-8">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="input-group mb-3">
+                <span class="input-group-text">Find Employee</span>
+                <input type="text" class="form-control" placeholder="enter Employee Name" id="srchEmployeeName" name="srchEmployeeName" />
+                <div class="input-group-append">
+                    <button class="btn btn-success" type="button" onclick="srchEmployee()" id="srch">Find</button>
+                </div>
+                <select asp-for="RequestVacation.EmpId" class="form-control" id="ddlEmployee" >
+                    <option value="">
+                        ----- select employee -----
+                    </option>
+                </select>
+
+                <span asp-validation-for="RequestVacation.EmpId" class="text-danger"></span>
+            </div>
+
+     
+            <div class="form-group w-75">
+                <label asp-for="RequestVacation.VacationTypeId" class="control-label"></label>
+             @*   <select asp-for="RequestVacation.VacationTypeId" asp-items="VacationTypeslistItems" class="form-control">
+                    <option value="">
+                        ----- select Vacation Type -----
+                    </option>
+                </select>*@
+                <select asp-for="RequestVacation.VacationTypeId" class="form-control" id="ddlVacationType">
+                
+                </select>
+                <span asp-validation-for="RequestVacation.VacationTypeId" class="text-danger"></span>
+            </div>
+            <div class="row">
+                <div class="col-6 form-group">
+                    <label asp-for="RequestVacation.StartDate" class="control-label"></label>
+                    <input asp-for="RequestVacation.StartDate" class="form-control" type="date"/>
+                    <span asp-validation-for="RequestVacation.StartDate" class="text-danger"></span>
+                </div>
+                <div class="col-6 form-group">
+                    <label asp-for="RequestVacation.EndDate" class="control-label"></label>
+                    <input asp-for="RequestVacation.EndDate" class="form-control" type="date" />
+                    <span asp-validation-for="RequestVacation.EndDate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-row mt-3">
+                <h6 style="color:cornflowerblue">Include Days</h6>
+                <div class="form-control">
+                    @{
+                        DayOfWeek day;
+                        for(int i=0; i<7; i++)
+                        {
+                            day = (DayOfWeek)i;
+                            <input type="checkbox" checked="checked" value="@i" name="includeDaysCheckBox"/> @day.ToString()
+                        }
+                    }
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequestVacation.Comment" class="control-label"></label>
+                <textarea asp-for="RequestVacation.Comment" class="form-control"></textarea>
+                <span asp-validation-for="RequestVacation.Comment" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <br />
+                <a asp-action="Index" style="text-decoration:none" class="btn btn-outline-dark">Back to List</a> |
+                <input type="submit" value="Create" class="btn btn-outline-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+ 
+<div id="testAjax">
+    test Ajax
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<script>
+
+    $(document).ready(function () {      
+        VacationType();
+    });
+
+    function srchEmployee()
+    {
+        //if ($('#srchEmployeeName').val() == '' || $('#srchEmployeeName').val().includes(" ")) {
+        if ($('#srchEmployeeName').val() == '') {
+            $("#ddlEmployee").html('<option value="" > Please, Enter Employee Name </option>');
+            $("#ddlEmployee").css({
+                "color": "red",
+                "font-weight": "" // example of adding more styles
+            });
+        }
+        else if ($('#srchEmployeeName').val().includes(" ")) {
+            // $("button").click(function () {
+            let srchEmployeeNamewithSpace = document.getElementById("srchEmployeeName").value;
+          //  console.log(inputValuewithSpace);
+            if (srchEmployeeNamewithSpace.trim() === "")
+            {
+                $("#ddlEmployee").html('<option value="" style="color:red;" >You Entered Space ):</option>');
+                $("#ddlEmployee").css({
+                    "color": "red",
+                    "font-weight": "" // example of adding more styles
+                });
+            }
+            else{
+              // console.log(inputValuewithSpace.trim());
+                $("#ddlEmployee").removeAttr("style");
+
+                $.ajax({
+                    url: "/api/VacationPlanApi/" + srchEmployeeNamewithSpace.trim(),             //$('#srchEmployeeName').val().trim(),
+                    //url: "/api/VacationPlanApi/mhmd",
+                    method: 'GET',
+                    Cache: false, // i don't need to save any data on my browser
+                    success: function (result) {
+
+                        let emps = '';
+                        emps += `<option value="" > ----- items found(${result.length})----- </option>`;
+
+                        for (x in result) {
+                            console.log(result.length)
+                            emps += `<option value="${result[x].id}">id: ${result[x].id} -- ${result[x].name}</option>`;
+                        }
+                        // $("#ddlEmployee").append(emps);
+                        $("#ddlEmployee").html(emps);
+
+                        //console.log(result[0].name);
+                        // $("#testAjax").html(result[0].name);
+                    }
+                });
+                //  });
+            }
+        }
+    
+    }
+    
+    VacationType = () => {
+
+        $.ajax({
+            url: "/VacationPlan/GetVacationTypes" ,            
+            method: 'GET',
+            Cache: false, // i don't need to save any data on my browser
+            success: function (VactionsResult) {
+
+                //var res = Object.values(VactionsResult);
+                console.log(VactionsResult);              
+
+                let Vacation = '';
+                Vacation += `<option value="" > Select Vacation.. Vacation found(${VactionsResult.length}) </option>`;
+                
+                for (x in VactionsResult) {
+                    Vacation += `<option value="${VactionsResult[x].id}" style="color:#fff; background-color:${VactionsResult[x].backgroundVacationColor}">
+                     ${VactionsResult[x].id} -- ${VactionsResult[x].vacationName} == NoOfdays = ${VactionsResult[x].noOfdays}</option>`;
+                } 
+                $("#ddlVacationType").html(Vacation);
+            }
+        });
+    }
+</script>

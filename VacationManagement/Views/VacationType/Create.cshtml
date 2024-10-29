@@ -1,0 +1,63 @@
+﻿@model VacationManagement.Models.VacationType
+
+@{
+    ViewData["Title"] = "Create VacationType";
+}
+@*Spectrum Colors this is new for me *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src='~/js/spectrum.js'></script>
+<link rel='stylesheet' href='~/css/spectrum.css' />
+
+@if (@ViewBag.vacationTypeExist == true)
+    {
+    <h5 class="alert alert-danger">Already, Vacation Registered </h5>
+    }
+<h4> Create VacationType  </h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="VacationName" class="control-label"></label>
+                <input asp-for="VacationName" class="form-control" />
+                <span asp-validation-for="VacationName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BackgroundVacationColor" class="control-label"></label>
+                <input asp-for="BackgroundVacationColor" class="form-control" id="spectrumColor" readonly/>
+                <span asp-validation-for="BackgroundVacationColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfdays" class="control-label"></label>
+                <input asp-for="NoOfdays" class="form-control" />
+                <span asp-validation-for="NoOfdays" class="text-danger"></span>
+            </div>
+     <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="VacationTypes">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}    
+}
+
+<script>
+
+    $("#spectrumColor").spectrum({
+        //flat: true,
+        color: "#000",
+        preferredFormat: "hex",
+        showInput: true
+    });
+
+    $("#spectrumColor").show();
+
+</script>
