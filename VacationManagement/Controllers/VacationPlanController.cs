@@ -1,5 +1,4 @@
-﻿using DinkToPdf;
-using DinkToPdf.Contracts;
+﻿
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -12,11 +11,10 @@ namespace VacationManagement.Controllers
     public class VacationPlanController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private readonly IConverter _converter;
-        public VacationPlanController(ApplicationDbContext applicationDbContext,    IConverter converter)
+  
+        public VacationPlanController(ApplicationDbContext applicationDbContext)
         {
-            _context = applicationDbContext;
-            _converter = converter;
+            _context = applicationDbContext;    
         }
         public IActionResult Index()
         {
@@ -250,30 +248,31 @@ namespace VacationManagement.Controllers
             </html>";
 
             // Configure PDF settings
-            var pdfDoc = new HtmlToPdfDocument
-            {
-                GlobalSettings = new GlobalSettings
-                {
-                    PaperSize = PaperKind.A4,
-                    Orientation = Orientation.Portrait,
-                    Out = null // No file output, we are returning a stream
-                },
-                Objects = {
-                new ObjectSettings
-                {
-                    HtmlContent = htmlContent,
-                    WebSettings = { DefaultEncoding = "utf-8" }
-                }
-            }
-            };
+            //var pdfDoc = new HtmlToPdfDocument
+            //{
+            //    GlobalSettings = new GlobalSettings
+            //    {
+            //        PaperSize = PaperKind.A4,
+            //        Orientation = Orientation.Portrait,
+            //        Out = null // No file output, we are returning a stream
+            //    },
+            //    Objects = {
+            //    new ObjectSettings
+            //    {
+            //        HtmlContent = htmlContent,
+            //        WebSettings = { DefaultEncoding = "utf-8" }
+            //    }
+            //}
+            //};
 
-            // Generate PDF
-            var pdf = _converter.Convert(pdfDoc);
+            //// Generate PDF
+            //var pdf = _converter.Convert(pdfDoc);
 
             // return Content("Print Report Action under Developing");
 
             // Return PDF file as a downloadable response
-            return File(pdf, "application/pdf", "VacationReport.pdf");
+           // return File(pdf, "application/pdf", "VacationReport.pdf");
+           return File("", "application/pdf", "VacationReport.pdf");
           
         }
         public IActionResult CVSFile(int empId, DateTime fromStartDate, DateTime toEndDate, string type)

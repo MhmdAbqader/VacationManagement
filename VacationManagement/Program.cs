@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using VacationManagement.Data;
-using DinkToPdf;
-using DinkToPdf.Contracts;
+
 
 namespace VacationManagement
 {
@@ -21,8 +20,7 @@ namespace VacationManagement
             });
 
 
-            // Register DinkToPdf
-            builder.Services.AddSingleton(typeof(IConverter), new SynchronizedConverter(new PdfTools()));
+     
 
 
             var app = builder.Build();
